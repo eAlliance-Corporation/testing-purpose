@@ -1,0 +1,45 @@
+{   
+    "Layout":{
+    "Headercolor": {
+        "value": "#0F2CB3"
+      },
+      "Showcitations" :{
+        "value": "true"
+      }, 
+    "applicationname" :{
+        "value": "Deerfield HR Gen AI Chatbot"
+      },  
+     "HeaderRightText" :{
+        "value": "Powered by JustAskAthena.ai from eAlliance"
+     },
+     "HeaderLeftText" :{
+        "value": "Deerfield HR Gen AI Chatbot"
+     },
+     "PageBodyHeading" :{
+        "value": "Chat with Deerfield HR"
+     },
+     "PageBodySubHeading" :{
+        "value": "Ask Anything about Deerfield HR"
+     },
+     "Placeholder":{
+        "value" : "Type a new question (e.g. does my plan cover annual eye exams?)"
+    },
+       
+      
+     "Questions":{
+        "Question1":{
+            "value" :  "What is included in my Northwind Health Plus plan that is not in standard?"
+        },
+        "Question2":{
+            "value" :"What happens in a performance review?"
+        },
+        "Question3":{
+            "value" : "What does a Product Manager do?"
+        }
+    
+        
+    }     
+} 
+}  
+    
+
