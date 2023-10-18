@@ -1,0 +1,55 @@
+{   
+    "Layout":{
+    "Headercolor": {
+        "value": "#8E2C89"
+      },
+     
+    "applicationname" :{
+        "value": "VPower Gen AI Chatbot"
+      }, 
+      "Showcitations" :{
+        "value": "true"
+      }, 
+     "HeaderRightText" :{
+        "value": "Powered by JustAskAthena.ai from eAlliance"
+     },
+     "HeaderLeftText" :{
+        "value": "VPower Conference Gen AI Chatbot"
+     },
+     "PageBodyHeading" :{
+        "value": "Chat with VPower"
+     },
+     "PageBodySubHeading" :{
+        "value": "Ask any Question about VPower Conference"
+     },
+     "Placeholder":{
+        "value" : "Type a new question (e.g. Why to attend VPower Conference?)"
+    },
+       
+      
+     "Questions":{
+        "Question1":{
+            "value" : "Who are the keynote speakers and featured presenters?"
+        },
+        "Question2":{
+            "value" : "What is VPower?"
+        },
+        "Question3":{
+            "value" : "When is VPower?"
+        }
+    
+        
+    }
+      
+     
+      
+      
+      
+     
+      
+     
+     
+} 
+}  
+    
+

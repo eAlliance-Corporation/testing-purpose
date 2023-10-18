@@ -1,0 +1,53 @@
+{   
+    "Layout":{
+    "Headercolor": {
+        "value": "#00bfff"
+      },
+     
+    "applicationname" :{
+        "value": "ITServe Synergy 2023"
+      },  
+      "Showcitations" :{
+        "value": "true"
+      },  
+     "HeaderRightText" :{
+        "value": "Powered by JustAskAthena.ai from eAlliance"
+     },
+     "HeaderLeftText" :{
+        "value": "ITServe Synergy 2023 chatbot"
+     },
+     "PageBodyHeading" :{
+        "value": "Chat with ITServe Synergy 2023"
+     },
+     "PageBodySubHeading" :{
+        "value": "Ask any Question about ITServe Synergy"
+     },
+     "Placeholder":{
+        "value" : "Type a new question (e.g. Where is the event?)"
+    },
+       
+      
+     "Questions":{
+        "Question1":{
+            "value" : "When is the event?"
+        },
+        "Question2":{
+            "value" : "Who are keynote speakers?"
+        },
+        "Question3":{
+            "value" : "What is ITServe Synergy?"
+        }
+    
+        
+    }
+      
+     
+      
+      
+      
+     
+      
+     
+     
+} 
+}

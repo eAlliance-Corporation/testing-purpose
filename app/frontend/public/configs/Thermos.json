@@ -1,0 +1,56 @@
+{   
+    "Layout":{
+    "Headercolor": {
+        "value": "#0F2CB3"
+      },
+     
+    "applicationname" :{
+        "value": "Thermos Gen AI Chatbot"
+      }, 
+
+       "Showcitations" :{
+        "value": "true"
+      }, 
+     "HeaderRightText" :{
+        "value": "Powered by JustAskAthena.ai from eAlliance"
+     },
+     "HeaderLeftText" :{
+        "value": "Thermos Gen AI Chatbot"
+     },
+     "PageBodyHeading" :{
+        "value": "Chat with Thermos"
+     },
+     "PageBodySubHeading" :{
+        "value": "Ask any Question about Thermos Products"
+     },
+     "Placeholder":{
+        "value" : "Type a new question (e.g. Suggest some BPA Bottles?)"
+    },
+       
+      
+     "Questions":{
+        "Question1":{
+            "value" : "I have 5 year old daughter she loves disney products. what can you suggest?"
+        },
+        "Question2":{
+            "value" : "Suggest some Best coolers for office purpose?"
+        },
+        "Question3":{
+            "value" : "What would be great for Tailgate party?"
+        }
+    
+        
+    }
+      
+     
+      
+      
+      
+     
+      
+     
+     
+} 
+}  
+    
+

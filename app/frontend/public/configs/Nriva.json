@@ -1,0 +1,53 @@
+{   
+    "Layout":{
+    "Headercolor": {
+        "value": "#ff9900"
+      },
+     
+    "applicationname" :{
+        "value": "NRIVA Gen AI Chatbot"
+      }, 
+      "Showcitations" :{
+        "value": "false"
+      }, 
+     "HeaderRightText" :{
+        "value": "Powered by JustAskAthena.ai from eAlliance"
+     },
+     "HeaderLeftText" :{
+        "value": "NRIVA Global Convention Kickoff"
+     },
+     "PageBodyHeading" :{
+        "value": "Chat with NRIVA Gen AI"
+     },
+     "PageBodySubHeading" :{
+        "value": "Ask about NRIVA Global Convention Kickoff"
+     },
+     "Placeholder":{
+        "value" : "Type a new question (e.g. Is there breakfast on Sunday?)"
+    },
+       
+      
+     "Questions":{
+        "Question1":{
+            "value" : "What is the event?"
+        },
+        "Question2":{
+            "value" : "Where is the event?"
+        },
+        "Question3":{
+            "value" : "Who are keynote speakers and featured presenters?"
+        }
+    
+        
+    }
+      
+     
+      
+      
+      
+     
+      
+     
+     
+} 
+}
