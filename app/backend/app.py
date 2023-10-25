@@ -96,9 +96,9 @@ async def index():
     return await bp.send_static_file("index.html")
 
 
-@bp.route("/favicon.ico")
+@bp.route("/eaicon.ico")
 async def favicon():
-    return await bp.send_static_file("favicon.ico")
+    return await bp.send_static_file("eaicon.ico")
 
 
 @bp.route("/assets/<path:path>")

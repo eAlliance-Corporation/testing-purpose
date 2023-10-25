@@ -4,12 +4,91 @@
     padding: 15px 50px 5px;
     justify-content: flex-end;
 }
+/* Add the following CSS styles to your existing styles.css or Document.module.css file */
+
+/* To display PDFs in a list format and adjust the number of PDFs according to screen size */
 .gridContainer {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  
+  .gridItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px; /* Adjust margin as needed */
+  }
+  
+  /* To display the name beside the PDF icon */
+  .gridItem img {
+    height: 20px;
+    width: 20px;
+  }
+  
+  .gridItem div {
+    margin-top: 5px; /* Adjust margin as needed */
+    text-align: center;
+  }
+  
+  /* To adjust spacing between PDFs */
+  /* You can modify this value to control the gap between PDF items */
+  .gridItem {
+    margin-right: 10px; /* Adjust the right margin as needed */
+  }
+  
+/* .gridContainer {
     display: grid;
     grid-template-columns: auto auto;
     grid-column-gap: 20px;
     grid-row-gap: 20px;
     padding: 10px;
+} */
+
+.listContainer {
+    list-style: none;
+    padding: 0;
+
+  }
+  
+  /* Define styles for list items */
+  .listItem {
+    display: flex;
+    align-items: center;
+   
+    margin-bottom: 10px;
+  }
+  
+  /* Style the PDF icon */
+  .listItem img {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Style the document name */
+  .listItem span {
+    font-size: 16px;
+    margin-right: 10px;
+  }
+  
+  /* Style the status icons */
+  .listItem img.status-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Define hover effect for list items */
+  .listItem:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+  }
+@media (max-width: 768px) {
+    .listContainer {
+      flex-direction: column; /* Change to a single column layout */
+      align-items: center; /* Center-align PDF items */
+    }
 }
 @media only screen and (min-width: 480px) {
     .gridContainer {
@@ -36,11 +115,11 @@
         grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
     }
 }
-.gridItem {
+/* .gridItem {
     padding: 15px 20px;
     font-size: 12px;
     text-align: center;
-}
+} */
 .gridItem:hover {
     background: #dbdadc;
     border-radius: 5px;
@@ -88,4 +167,26 @@
     -ms-animation: rotating 2s linear infinite;
     -o-animation: rotating 2s linear infinite;
     animation: rotating 2s linear infinite;
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+.chatSettingsSeparator {
+  margin-top: 15px;
+}
+
+.loginRow {
+  display: flex;
+  justify-content: center;
+}
+.loginBox {
+  width: 30%;
+  background: #f3f3f3;
+  border: 1px solid #707070;
+  border-radius: 20px;
+  padding: 20px;
 }

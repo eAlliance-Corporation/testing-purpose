@@ -14,9 +14,9 @@ const Layout = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    if (!context.user && location.pathname !== "/") {
-        navigate("/");
-    }
+    // if (!context.user && location.pathname !== "/") {
+    //     navigate("/");
+    // }
 
     return (
         <div className={styles.layout}>
@@ -26,31 +26,31 @@ const Layout = () => {
                         <h3 className={styles.headerTitle}>{appConfig.Layout.HeaderLeftText.value}</h3>
                     </Link>
                     <nav>
-                        {context.user && (
+                        {/* {context.user && ( */}
                             <ul className={styles.headerNavList}>
                                 <li>
                                     <NavLink to="/" className={({ isActive }) => (isActive ? styles.headerNavPageLinkActive : styles.headerNavPageLink)}>
-                                        Chat
+                                        {/* Chat */}
                                     </NavLink>
                                 </li>
-                                {context.user === "admin" && (
+                                {/* {context.user === "admin" && ( */}
                                     <li className={styles.headerNavLeftMargin}>
                                         <NavLink
                                             to="/documents"
                                             className={({ isActive }) => (isActive ? styles.headerNavPageLinkActive : styles.headerNavPageLink)}
                                         >
-                                            Documents
+                                            {/* Documents */}
                                         </NavLink>
                                     </li>
-                                )}
+                                {/* )} */}
                             </ul>
-                        )}
+                        {/* )} */}
                     </nav>
 
                     <div className={styles.headerRightSection} style={{ display: "flex", alignItems: "center" }}>
                         <h4 className={styles.headerRightText}>{appConfig.Layout.HeaderRightText.value}</h4>
                         {/* <img src={ALGLogo} alt="alg logo" height="40px" width="60px" style={{ marginLeft: "10px" }} /> */}
-                        {context.user && (
+                        {context.user === "admin" && (
                             <h4
                                 className={styles.headerRightText}
                                 style={{ cursor: "pointer" }}

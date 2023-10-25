@@ -5,12 +5,16 @@ import { initializeIcons } from "@fluentui/react";
 import appConfig from "./utils/EAAppConfig";
 import "./index.css";
 
+
 import { ContextProvider } from "./context/store";
 import Layout from "./pages/layout/Layout";
 import Chat from "./pages/chat/Chat";
 import Document from "./pages/document/Document";
 
+
 initializeIcons();
+document.title = appConfig.Layout.applicationname.value;
+
 
 const router = createHashRouter([
     {
@@ -32,25 +36,24 @@ const router = createHashRouter([
         ]
     }
 ]);
-const App = () => {
-    useEffect(() => {
-        // Update the title dynamically here
-        document.title = appConfig.Layout.applicationname.value;
-    }, []); // The empty dependency array ensures this effect runs once
+// const App = () => {
+//     useEffect(() => {
+//         // Update the title dynamically here
+//         document.title = appConfig.Layout.applicationname.value;
+//     }, []); // The empty dependency array ensures this effect runs once
 
-    return (
-        <React.StrictMode>
+
+//     return <document.title />;
+// };
+
+
+// ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(<App />);
+
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+    <React.StrictMode>
+        <ContextProvider>
             <RouterProvider router={router} />
-        </React.StrictMode>
-    );
-};
-
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(<App />);
-
-// ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-//     <React.StrictMode>
-//         <ContextProvider>
-//             <RouterProvider router={router} />
-//         </ContextProvider>
-//     </React.StrictMode>
-// );
+        </ContextProvider>
+    </React.StrictMode>
+);

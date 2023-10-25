@@ -14,8 +14,8 @@ import { UserChatMessage } from "../../components/UserChatMessage";
 import { AnalysisPanel, AnalysisPanelTabs } from "../../components/AnalysisPanel";
 import { SettingsButton } from "../../components/SettingsButton";
 import { ClearChatButton } from "../../components/ClearChatButton";
-import LoginPage from "./LoginPage";
-import Context from "../../context/store";
+// import LoginPage from "./LoginPage";
+// import Context from "../../context/store";
 
 const Chat = () => {
     const [isConfigPanelOpen, setIsConfigPanelOpen] = useState(false);
@@ -42,7 +42,7 @@ const Chat = () => {
     const [answers, setAnswers] = useState<[user: string, response: AskResponse][]>([]);
     const [streamedAnswers, setstreamedAnswers] = useState<[user: string, response: AskResponse][]>([]);
 
-    const context = useContext(Context);
+    // const context = useContext(Context);
 
     const handleAsyncRequest = async (question: string, answers: [string, AskResponse][], setAnswers: Function, responseBody: ReadableStream<any>) => {
         let answer: string = "";
@@ -188,7 +188,7 @@ const Chat = () => {
 
         setSelectedAnswer(index);
     };
-    if (context.user)
+    // if (context.user)
         return (
             <div className={styles.container}>
                 <div className={styles.commandsContainer}>
@@ -352,7 +352,7 @@ const Chat = () => {
                 </div>
             </div>
         );
-    return <LoginPage />;
+    // return <LoginPage />;
 };
 
 export default Chat;
