@@ -1,6 +1,8 @@
 pypdf==3.9.0
 azure-identity==1.13.0
 azure-search-documents==11.4.0b6
+azure-core==1.29.5
+azure-cosmos==4.5.1
 azure-ai-formrecognizer==3.2.1
 azure-storage-blob==12.14.1
 openai[datalib]==0.27.8

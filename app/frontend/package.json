@@ -10,9 +10,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "watch": "tsc && vite build --watch",
-    "preinstall": "npm install clipboard-copy"
+    "preinstall": "npm install clipboard-copy && npm install @azure/cosmos"
   },
   "dependencies": {
+    "@azure/cosmos": "^4.0.0",
     "@fluentui/react": "^8.110.7",
     "@fluentui/react-icons": "^2.0.206",
     "@react-spring/web": "^9.7.3",

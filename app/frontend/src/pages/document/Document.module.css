@@ -16,9 +16,9 @@
   
   .gridItem {
     display: flex;
-    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
-    margin: 10px; /* Adjust margin as needed */
+    
   }
   
   /* To display the name beside the PDF icon */

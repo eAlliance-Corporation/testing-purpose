@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import { initializeIcons } from "@fluentui/react";
 import appConfig from "./utils/EAAppConfig";
+
 import "./index.css";
 
 

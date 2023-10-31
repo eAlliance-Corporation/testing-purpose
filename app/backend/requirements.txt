@@ -1,5 +1,7 @@
 azure-identity==1.13.0
 quart==0.18.4
+azure-core==1.29.5
+azure-cosmos==4.5.1
 langchain==0.0.236
 openai[datalib]==0.27.8
 tiktoken==0.4.0

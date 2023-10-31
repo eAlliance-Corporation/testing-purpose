@@ -5,7 +5,7 @@ import mimetypes
 import os
 from asyncio import create_task
 from typing import AsyncGenerator
-
+from azure.cosmos import CosmosClient
 import aiohttp
 import openai
 from azure.ai.formrecognizer.aio import DocumentAnalysisClient
@@ -96,9 +96,9 @@ async def index():
     return await bp.send_static_file("index.html")
 
 
-@bp.route("/eaicon.ico")
+@bp.route("/favicon.ico")
 async def favicon():
-    return await bp.send_static_file("eaicon.ico")
+    return await bp.send_static_file("favicon.ico")
 
 
 @bp.route("/assets/<path:path>")
@@ -247,6 +247,30 @@ async def delete_file():
         }
     )
 
+def insert_question_and_answer(user_question, bot_answer):
+    # Define your Cosmos DB connection and container settings
+    endpoint = "https://history-c.documents.azure.com:443/"
+    key = "xy9CShbxmmkjlet45CyneUC2xg9f1rtro1oyWOC36f4ssB82uOfvWy6hFP69aQKPCPulYY9rjFrQACDbtDWU7g=="
+    database_id = "ToDoList"
+    container_id = "history"
+
+    # Initialize the Cosmos DB client
+    client = CosmosClient(endpoint, key)
+
+    # Get a reference to the database
+    database = client.get_database_client(database_id)
+
+    # Get a reference to the container
+    container = database.get_container_client(container_id)
+
+    # Create an item (document) with user question and bot answer
+    item = {
+        "user_question": user_question,
+        "bot_answer": bot_answer
+    }
+
+    # Insert the item into the Cosmos DB container
+    container.create_item(item)
 
 @bp.route("/ask", methods=["POST"])
 async def ask():
@@ -282,7 +306,11 @@ async def chat():
         async with aiohttp.ClientSession() as s:
             openai.aiosession.set(s)
             r = await impl.run_without_streaming(request_json["history"], request_json.get("overrides", {}))
+            bot_answer=r("bot_answer")
+            await insert_question_and_answer(user_question,bot_answer )
+            user_question = request_json["history"][-1]["user"]
         return jsonify(r)
+    
     except Exception as e:
         logging.exception("Exception in /chat")
         return jsonify({"error": str(e)}), 500
@@ -306,10 +334,16 @@ async def chat_stream():
         response_generator = impl.run_with_streaming(request_json["history"], request_json.get("overrides", {}))
         response = await make_response(format_as_ndjson(response_generator))
         response.timeout = None  # type: ignore
+        async for event in response_generator:
+            if event.get("user") and event.get("message"):
+                user_question = event["user"]
+                bot_answer = event["message"]
+                await insert_question_and_answer(user_question, bot_answer)
         return response
     except Exception as e:
         logging.exception("Exception in /chat")
         return jsonify({"error": str(e)}), 500
+    
 
 
 @bp.before_app_serving
@@ -479,3 +513,4 @@ def create_app():
     # Level should be one of https://docs.python.org/3/library/logging.html#logging-levels
     logging.basicConfig(level=os.getenv("APP_LOG_LEVEL", "ERROR"))
     return app
+

@@ -36,6 +36,7 @@ export const Answer = ({
     const parsedAnswer = useMemo(() => parseAnswerToHtml(answer.answer, isStreaming, onCitationClicked), [answer]);
 
     const [isCopied, setIsCopied] = useState(false);
+    const [showCitations, setShowCitations] = useState(false);
 
     const sanitizedAnswerHtml = DOMPurify.sanitize(parsedAnswer.answerHtml);
     // const handleCopyToClipboard = async () => {
@@ -60,7 +61,9 @@ export const Answer = ({
 
         return div.textContent || div.innerText || "";
     }
-
+    const handleCheckboxChange = () => {
+        setShowCitations(!showCitations);
+      };
     const handleCopyToClipboard = async () => {
         try {
             const textToCopy = stripHtmlTags(parsedAnswer.answerHtml);
@@ -112,10 +115,20 @@ export const Answer = ({
             </Stack.Item>
 
             <Stack.Item grow>
-                <div className={styles.answerText} dangerouslySetInnerHTML={{ __html: sanitizedAnswerHtml }}></div>
+                <div className={styles.answerText} dangerouslySetInnerHTML={{ __html: sanitizedAnswerHtml }}>
+                
+                </div>
             </Stack.Item>
+            <div className = {styles.showcitation}>
+            <label>Show Citations</label>
+            <input
+               type="checkbox"
+               checked={showCitations}
+               onChange={handleCheckboxChange}/>
+             
+             </div>
 
-            {appConfig.Layout.Showcitations.value && (
+            {showCitations && (
                 <Stack.Item>
                     <Stack horizontal wrap tokens={{ childrenGap: 5 }}>
                         <span className={styles.citationLearnMore}>Citations:</span>
