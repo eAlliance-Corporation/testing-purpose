@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import styles from "./Document.module.css";
+
 import { PrimaryButton, TextField } from "@fluentui/react";
 import PDFfile from "../../assets/pdf.svg";
 import Pending from "../../assets/pending.svg";
@@ -12,10 +13,12 @@ import { useNavigate } from "react-router-dom";
 import { ArrowCounterclockwise24Filled } from "@fluentui/react-icons";
 import MainLoginPage from "./MainloginPage";
 
+
 const FileGridItem = (props: any) => {
-    const { document, ingested, handleUpdate, handleDelete, ingestLock } = props;
+    const { document, ingested, handleUpdate, handleDelete, ingestLock,context } = props;
     const [showContextualMenu, setShowContextualMenu] = useState<boolean>(false);
     const [file, setFile] = useState();
+    const navigate = useNavigate();
     const onHideContextualMenu = () => setShowContextualMenu(false);
 
     const linkRef = useRef<HTMLInputElement>(null);
@@ -28,13 +31,29 @@ const FileGridItem = (props: any) => {
             setFile(undefined);
         }
     };
+    const handleOpenDocument = () => {
+        if (context.user === "admin") {
+          // If the user is an admin, open the document
+          hrefRef.current?.click();
+        } else {
+          // If the user is not an admin, redirect to the login page
+          return <MainLoginPage />; // Replace "/login" with the actual login page route
+        }
+      };
     const menuItems: IContextualMenuItem[] = [
         {
             key: "openItem",
             text: "Open",
             iconProps: { iconName: "Folder", style: { color: "salmon" } },
-            onClick: () => hrefRef.current?.click()
-        },
+            onClick: () => {
+              if (context.user === "admin") {
+                hrefRef.current?.click();
+              } else {
+                // If the user is not an admin, redirect to the login page
+                navigate("/Mainloginpage"); // Replace "/login" with the actual login page route
+              }
+            }
+          },
         {
             key: "divider_1",
             itemType: ContextualMenuItemType.Divider
@@ -72,8 +91,20 @@ const FileGridItem = (props: any) => {
     }
 
     return (
-        <li className={styles.listItem}>
-            <a ref={hrefRef} href={`/file/${document}`} target="_blank">
+      <li className={styles.listItem}>
+        {/* <Route path="/file/:document"> */}
+        {/* {context.user === "admin" ? ( */}
+         <a ref={hrefRef} href={`/file/${document}`} target="_blank" onClick={handleOpenDocument}  >
+         <div
+                ref={linkRef}
+                className={styles.gridItem}
+                onClick={() => hrefRef.current?.click()}
+                onContextMenu={e => {
+                    e.preventDefault();
+                    setShowContextualMenu(true);
+                }}
+                style={{ position: "relative" }}
+            >
                 <img src={PDFfile} alt="pdf file" height="20px" width="20px" />
                 <span>{document}</span>
                 {ingested?.status === 2 ? (
@@ -83,7 +114,14 @@ const FileGridItem = (props: any) => {
                 ) : (
                     <img src={Pending} alt="Pending" height="20px" width="20px" />
                 )}
+            </div>
             </a>
+            {/* ) : (
+                <div>
+                   <p>You do not have permission to access this document.</p>
+                </div>
+              )}
+            </Route> */}
             <input
                 ref={fileRef}
                 type="file"
@@ -100,6 +138,7 @@ const FileGridItem = (props: any) => {
                 onDismiss={onHideContextualMenu}
             />
         </li>
+        
     );
 };
 
@@ -116,7 +155,7 @@ const handleError = (err: any) => console.log(err);
 
 const Document = () => {
     const context = useContext(Context);
-    const navigate = useNavigate();
+    
     const [documents, setDocuments] = useState({ files: [], ingested: {}, ingest_lock: true });
     const [search, setSearch] = useState<string | undefined>("");
     const [file, setFile] = useState();
@@ -195,6 +234,7 @@ const Document = () => {
     }
     return (
         <>
+        
         <div style={{ display: "flex" }}>
             <div style={{ flexGrow: 1 }}>
                 {documents.ingest_lock && (
@@ -230,6 +270,7 @@ const Document = () => {
                     <PrimaryButton text="Reindex" onClick={handleIngest} disabled={documents.ingest_lock} />
                 </div>
             </div>
+            {/* <Route path="/documents"> */}
             <div style={{ padding: "5px 10px" }}>
                 <div className={styles.gridContainer}>
                     {filteredDocuments.map(d => (
@@ -240,10 +281,12 @@ const Document = () => {
                             ingestLock={documents.ingest_lock}
                             handleUpdate={(f: any) => handleUpdate(f, d)}
                             handleDelete={() => handleDelete(d)}
+                            // context={context} // Pass 'context' as a prop
                         />
                     ))}
                 </div>
             </div>
+            {/* </Route> */}
         </>
     );
 };
