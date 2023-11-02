@@ -16,3 +16,4 @@ opentelemetry-instrumentation-requests==0.40b0
 opentelemetry-instrumentation-aiohttp-client==0.40b0
 pypdf==3.9.0
 Werkzeug==2.2.2
+pycryptodome ==3.19.0
