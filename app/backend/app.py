@@ -1,11 +1,15 @@
 import io
+import uuid
 import json
 import logging
 import mimetypes
 import os
+import io
 from asyncio import create_task
 from typing import AsyncGenerator
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 from azure.cosmos import CosmosClient
+from datetime import datetime
 import aiohttp
 import openai
 from azure.ai.formrecognizer.aio import DocumentAnalysisClient
@@ -55,6 +59,19 @@ from utils import (
     is_ingest_lock,
     create_ingest_lock,
 )
+# connection_string = "DefaultEndpointsProtocol=https;AccountName=stxlptm4uybarpw;AccountKey=KPqI1EGCMSfN5fffpKcZug6EpjbrWX1DOCya9b+LLjVhx+ZS0dpE3x0KH1QlsmKSuL+2P4ZW8vwe+AStgQ1iwg==;EndpointSuffix=core.windows.net"  # Replace with your Azure Blob Storage connection string
+# blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+# container_name = "stgcontainer"
+# container_client = blob_service_client.get_container_client(container_name)
+cosmos_endpoint = "https://history-c.documents.azure.com:443/"
+cosmos_key = "xy9CShbxmmkjlet45CyneUC2xg9f1rtro1oyWOC36f4ssB82uOfvWy6hFP69aQKPCPulYY9rjFrQACDbtDWU7g=="
+cosmos_client = CosmosClient(cosmos_endpoint, cosmos_key)
+
+# Initialize the Cosmos DB container
+cosmos_db_name = "ToDoList"
+container_name = "history"
+database = cosmos_client.get_database_client(cosmos_db_name)
+container = database.get_container_client(container_name)
 
 CONFIG_CREDENTIAL = "azure_credential"
 CONFIG_ASK_APPROACHES = "ask_approaches"
@@ -247,30 +264,6 @@ async def delete_file():
         }
     )
 
-def insert_question_and_answer(user_question, bot_answer):
-    # Define your Cosmos DB connection and container settings
-    endpoint = "https://history-c.documents.azure.com:443/"
-    key = "xy9CShbxmmkjlet45CyneUC2xg9f1rtro1oyWOC36f4ssB82uOfvWy6hFP69aQKPCPulYY9rjFrQACDbtDWU7g=="
-    database_id = "ToDoList"
-    container_id = "history"
-
-    # Initialize the Cosmos DB client
-    client = CosmosClient(endpoint, key)
-
-    # Get a reference to the database
-    database = client.get_database_client(database_id)
-
-    # Get a reference to the container
-    container = database.get_container_client(container_id)
-
-    # Create an item (document) with user question and bot answer
-    item = {
-        "user_question": user_question,
-        "bot_answer": bot_answer
-    }
-
-    # Insert the item into the Cosmos DB container
-    container.create_item(item)
 
 @bp.route("/ask", methods=["POST"])
 async def ask():
@@ -286,6 +279,9 @@ async def ask():
         async with aiohttp.ClientSession() as s:
             openai.aiosession.set(s)
             r = await impl.run(request_json["question"], request_json.get("overrides") or {})
+            questions = r.get("questions", [])
+            answers = r.get("answers", [])
+            r={"questions": questions, "answers": answers}
         return jsonify(r)
     except Exception as e:
         logging.exception("Exception in /ask")
@@ -306,15 +302,16 @@ async def chat():
         async with aiohttp.ClientSession() as s:
             openai.aiosession.set(s)
             r = await impl.run_without_streaming(request_json["history"], request_json.get("overrides", {}))
-            bot_answer=r("bot_answer")
-            await insert_question_and_answer(user_question,bot_answer )
-            user_question = request_json["history"][-1]["user"]
+            questions = r.get("questions", [])
+            answers = r.get("answers", [])
+            r={"questions": questions, "answers": answers}
         return jsonify(r)
-    
     except Exception as e:
         logging.exception("Exception in /chat")
         return jsonify({"error": str(e)}), 500
 
+
+        
 
 async def format_as_ndjson(r: AsyncGenerator[dict, None]) -> AsyncGenerator[str, None]:
     async for event in r:
@@ -334,17 +331,37 @@ async def chat_stream():
         response_generator = impl.run_with_streaming(request_json["history"], request_json.get("overrides", {}))
         response = await make_response(format_as_ndjson(response_generator))
         response.timeout = None  # type: ignore
-        async for event in response_generator:
-            if event.get("user") and event.get("message"):
-                user_question = event["user"]
-                bot_answer = event["message"]
-                await insert_question_and_answer(user_question, bot_answer)
         return response
     except Exception as e:
         logging.exception("Exception in /chat")
         return jsonify({"error": str(e)}), 500
-    
 
+@bp.route('/store_qa', methods=['POST'])
+async def store_qa():
+    data = await request.get_json()
+    print(data)
+    questions = data.get('questions')
+    role = data.get('role')
+    print(questions)
+    # answers = data.get('answers')
+    # print(answers)
+    # if not questions or not answers:
+    #     return jsonify({'error': 'Questions and answers are required'}), 400
+
+    # for i, question in enumerate(questions):
+    #     answer = answers[i]
+    # blob_client = container_client.get_blob_client(f"storage.txt")  # You can use an index as the filename
+    # await blob_client.upload_blob(f"Question: {questions}\nAnswer: {answers}", overwrite=True)
+    item = {
+        "id": str(uuid.uuid4()),
+        "role": role ,
+        "content": questions,
+        
+        'createdAt': datetime.utcnow().isoformat(),  
+        'updatedAt': datetime.utcnow().isoformat()  
+    }
+    container.upsert_item(item)
+    return 'ok'
 
 @bp.before_app_serving
 async def setup_clients():
@@ -513,4 +530,3 @@ def create_app():
     # Level should be one of https://docs.python.org/3/library/logging.html#logging-levels
     logging.basicConfig(level=os.getenv("APP_LOG_LEVEL", "ERROR"))
     return app
-
