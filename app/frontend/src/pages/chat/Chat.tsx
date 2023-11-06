@@ -6,7 +6,7 @@ import appConfig from "../../utils/EAAppConfig";
 
 import styles from "./Chat.module.css";
 
-import { chatApi, RetrievalMode, Approaches, AskResponse, ChatRequest, ChatTurn } from "../../api";
+import { chatApi, RetrievalMode, Approaches, AskResponse, ChatRequest, ChatTurn, storechat } from "../../api";
 import { Answer, AnswerError, AnswerLoading } from "../../components/Answer";
 import { QuestionInput } from "../../components/QuestionInput";
 import { ExampleList } from "../../components/Example";
@@ -14,6 +14,8 @@ import { UserChatMessage } from "../../components/UserChatMessage";
 import { AnalysisPanel, AnalysisPanelTabs } from "../../components/AnalysisPanel";
 import { SettingsButton } from "../../components/SettingsButton";
 import { ClearChatButton } from "../../components/ClearChatButton";
+// import { BlobServiceClient, ContainerClient, BlockBlobClient } from "@azure/storage-blob";
+    
 // import LoginPage from "./LoginPage";
 // import Context from "../../context/store";
 
@@ -41,7 +43,7 @@ const Chat = () => {
     const [selectedAnswer, setSelectedAnswer] = useState<number>(0);
     const [answers, setAnswers] = useState<[user: string, response: AskResponse][]>([]);
     const [streamedAnswers, setstreamedAnswers] = useState<[user: string, response: AskResponse][]>([]);
-
+    // const { BlobServiceClient } = require("@azure/storage-blob");
     // const context = useContext(Context);
 
     const handleAsyncRequest = async (question: string, answers: [string, AskResponse][], setAnswers: Function, responseBody: ReadableStream<any>) => {
@@ -77,7 +79,7 @@ const Chat = () => {
 
     const makeApiRequest = async (question: string) => {
         lastQuestionRef.current = question;
-
+        storechatrequest(question,"User");
         error && setError(undefined);
         setIsLoading(true);
         setActiveCitation(undefined);
@@ -107,12 +109,15 @@ const Chat = () => {
             if (shouldStream) {
                 const parsedResponse: AskResponse = await handleAsyncRequest(question, answers, setAnswers, response.body);
                 setAnswers([...answers, [question, parsedResponse]]);
-            } else {
+                storechatrequest(parsedResponse.answer,"assistant")
+            } 
+            else {
                 const parsedResponse: AskResponse = await response.json();
                 if (response.status > 299 || !response.ok) {
                     throw Error(parsedResponse.error || "Unknown error");
                 }
                 setAnswers([...answers, [question, parsedResponse]]);
+                storechatrequest(parsedResponse.answer,"assistant")
             }
         } catch (e) {
             setError(e);
@@ -120,6 +125,34 @@ const Chat = () => {
             setIsLoading(false);
         }
     };
+   const storechatrequest = async (question : string,roletype:string) =>{
+    try {
+        
+        const request: any = {
+            role : roletype,
+            questions: question
+            
+                    };
+
+        const response = await storechat(request);
+        if (!response.body) {
+            throw Error("No response body");
+        }
+       console.log(response)
+    } catch (e) {
+        setError(e);
+    } finally {
+        // setIsLoading(false);
+    }
+
+   }
+    
+    
+    
+    
+    
+
+
 
     const clearChat = () => {
         lastQuestionRef.current = "";
